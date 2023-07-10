@@ -1,18 +1,22 @@
 import { Schema, Document, model } from 'mongoose';
 
 interface IPoint {
-  name: string;
-  coordinates: number[];
+  location: {
+    name: string;
+    id: string;
+  }
 }
 
 const pointSchema = new Schema<IPoint & Document>({
-  name: {
-    type: String,
-    required: true,
-  },
-  coordinates: {
-    type: [Number],
-    required: true,
+  location: {
+    name: {
+      type: String,
+      required: true,
+    },
+    id: {
+      type: String,
+      required: true
+    }
   },
 });
 
