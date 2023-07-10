@@ -4,11 +4,11 @@ interface IOrder {
   type: string;
   description: string;
   route: {
-    pickup: string;
-    dropoff: string;
+    pickup: Schema.Types.ObjectId;
+    dropoff: Schema.Types.ObjectId;
   };
   status: OrderStatus;
-  truck: string;
+  truck: Schema.Types.ObjectId;
 }
 
   enum OrderStatus {
@@ -27,21 +27,30 @@ interface IOrder {
       required: true 
     },
     route: {
-      pickup: { 
-        type: String, 
-        required: true 
+      pickup: {
+        type: Schema.Types.ObjectId,
+        ref: 'Routes',
+        required: true,
+        autopopulate: true, 
+        select: 'pointA', 
       },
-      dropoff: { 
-        type: String, 
-        required: true 
+      dropoff: {
+        type: Schema.Types.ObjectId,
+        ref: 'Routes',
+        required: true,
+        autopopulate: true, 
+        select: 'pointB',
       },
     },
     status: { 
-      type: String, enum: Object.values(OrderStatus), 
+      type: String, 
+      enum: Object.values(OrderStatus),
+      default: OrderStatus.EnProgreso,
       required: true 
     },
     truck: { 
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'Truck',
       required: true
     },
   });
