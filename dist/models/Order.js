@@ -18,20 +18,29 @@ const orderSchema = new mongoose_1.Schema({
     },
     route: {
         pickup: {
-            type: String,
-            required: true
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'Routes',
+            required: true,
+            autopopulate: true,
+            select: 'pointA',
         },
         dropoff: {
-            type: String,
-            required: true
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'Routes',
+            required: true,
+            autopopulate: true,
+            select: 'pointB',
         },
     },
     status: {
-        type: String, enum: Object.values(OrderStatus),
+        type: String,
+        enum: Object.values(OrderStatus),
+        default: OrderStatus.EnProgreso,
         required: true
     },
     truck: {
-        type: String,
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Truck',
         required: true
     },
 });
