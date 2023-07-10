@@ -1,10 +1,9 @@
 import { Router } from 'express'
+import * as orderControllers from '../controllers/orderControllers'
 
 const router: Router = Router()
 
-
-router.use('/', (req, res) => {
-    res.status(200).json('works')
-})
+//OBTENER TODAS LAS ORDENES DE LA DB
+router.get('/', orderControllers.getAllOrders)
 
 export default router
