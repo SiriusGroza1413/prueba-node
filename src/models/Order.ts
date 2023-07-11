@@ -1,60 +1,56 @@
 import { Schema, model, Document } from 'mongoose';
+import { IOrder, OrderStatus } from '../Interfaces/Order';
+import { IRoute } from '../Interfaces/Route';
+import { IPoint } from '../Interfaces/Point';
 
-interface IOrder {
-  type: string;
-  description: string;
-  route: {
-    pickup: Schema.Types.ObjectId;
-    dropoff: Schema.Types.ObjectId;
-  };
-  status: OrderStatus;
-  truck: Schema.Types.ObjectId;
-}
 
-  enum OrderStatus {
-    EnProgreso = 'En Progreso',
-    Completado = 'Completado',
-    Cancelado = 'Cancelado',
-  }
-  
-  const orderSchema = new Schema<IOrder & Document>({
-    type: { 
-      type: String, 
-      required: true 
+export const pointSchema = new Schema<IPoint & Document>({
+  location: {
+    name: {
+      type: String,
+      required: true,
     },
-    description: { 
-      type: String, 
-      required: true 
-    },
-    route: {
-      pickup: {
-        type: Schema.Types.ObjectId,
-        ref: 'Routes',
-        required: true,
-        autopopulate: true, 
-        select: 'pointA', 
-      },
-      dropoff: {
-        type: Schema.Types.ObjectId,
-        ref: 'Routes',
-        required: true,
-        autopopulate: true, 
-        select: 'pointB',
-      },
-    },
-    status: { 
-      type: String, 
-      enum: Object.values(OrderStatus),
-      default: OrderStatus.EnProgreso,
-      required: true 
-    },
-    truck: { 
-      type: Schema.Types.ObjectId,
-      ref: 'Truck',
+    placeId: {
+      type: String,
       required: true
-    },
-  });
-  
-const OrderModel = model<IOrder & Document>('Order', orderSchema);
+    }
+  },
+});
+export const PointModel = model<IPoint & Document>('Point', pointSchema)
 
-export default OrderModel
+
+const routeSchema = new Schema<IRoute & Document>({
+  pickup: pointSchema,
+  dropoff: pointSchema,
+  distance: {
+    type: Number,
+    required: true,
+  },
+});
+export const RouteModel = model<IRoute & Document>('Route', routeSchema)
+
+
+const orderSchema = new Schema<IOrder & Document>({
+  type: { 
+    type: String, 
+    required: true 
+  },
+  description: { 
+    type: String, 
+    required: true 
+  },
+  route: routeSchema,
+  status: { 
+    type: String,
+    enum: Object.values(OrderStatus),
+    default: OrderStatus.EnEspera,
+    required: true 
+  },
+  truck: { 
+    type: Schema.Types.ObjectId,
+    ref: 'Truck',
+    required: true
+  },
+});
+export const OrderModel = model<IOrder & Document>('Order', orderSchema);
+

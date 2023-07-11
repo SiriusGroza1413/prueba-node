@@ -1,6 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 
-interface ITruck{
+export interface ITruck{
+  
   model: string;
   make: string;
   year: number;
@@ -9,7 +10,7 @@ interface ITruck{
   created_at: number;
 }
 
-const truckSchema = new Schema<ITruck & Document>({
+export const truckSchema = new Schema<ITruck & Document>({
   model: {
     type: String,
     required: true,
@@ -36,4 +37,6 @@ const truckSchema = new Schema<ITruck & Document>({
   },
 });
 
-export const TruckModel = model<ITruck>('Truck', truckSchema);
+const TruckModel = model<ITruck>('Truck', truckSchema);
+
+export default TruckModel

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TruckModel = void 0;
+exports.truckSchema = void 0;
 const mongoose_1 = require("mongoose");
-const truckSchema = new mongoose_1.Schema({
+exports.truckSchema = new mongoose_1.Schema({
     model: {
         type: String,
         required: true,
@@ -28,4 +28,5 @@ const truckSchema = new mongoose_1.Schema({
         required: true,
     },
 });
-exports.TruckModel = (0, mongoose_1.model)('Truck', truckSchema);
+const TruckModel = (0, mongoose_1.model)('Truck', exports.truckSchema);
+exports.default = TruckModel;

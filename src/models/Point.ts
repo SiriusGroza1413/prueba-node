@@ -1,27 +1,24 @@
-import { Schema, Document, model } from 'mongoose';
-
-interface IPoint {
-  location: {
-    name: string;
-    id: string;
-  }
-}
-
-const pointSchema = new Schema<IPoint & Document>({
-  location: {
-    name: {
-      type: String,
-      required: true,
-    },
-    id: {
-      type: String,
-      required: true
-    }
-  },
-});
+// import { Schema, Document, model } from 'mongoose';
+// import { IPoint } from '../Interfaces/Point';
 
 
-export const PointModel = model<IPoint>('Point', pointSchema);
+// export const pointSchema = new Schema<IPoint & Document>({
+//   location: {
+//     name: {
+//       type: String,
+//       required: true,
+//     },
+//     placeId: {
+//       type: String,
+//       required: true
+//     }
+//   },
+// });
+
+
+// const PointModel = model<IPoint>('Point', pointSchema);
+
+// export default PointModel
 
 
 
