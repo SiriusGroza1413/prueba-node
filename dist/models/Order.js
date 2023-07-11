@@ -1,12 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.OrderModel = exports.RouteModel = exports.PointModel = exports.pointSchema = void 0;
 const mongoose_1 = require("mongoose");
-var OrderStatus;
-(function (OrderStatus) {
-    OrderStatus["EnProgreso"] = "En Progreso";
-    OrderStatus["Completado"] = "Completado";
-    OrderStatus["Cancelado"] = "Cancelado";
-})(OrderStatus || (OrderStatus = {}));
+const Order_1 = require("../Interfaces/Order");
+exports.pointSchema = new mongoose_1.Schema({
+    location: {
+        name: {
+            type: String,
+            required: true,
+        },
+        placeId: {
+            type: String,
+            required: true
+        }
+    },
+});
+exports.PointModel = (0, mongoose_1.model)('Point', exports.pointSchema);
+const routeSchema = new mongoose_1.Schema({
+    pickup: exports.pointSchema,
+    dropoff: exports.pointSchema,
+    distance: {
+        type: Number,
+        required: true,
+    },
+});
+exports.RouteModel = (0, mongoose_1.model)('Route', routeSchema);
 const orderSchema = new mongoose_1.Schema({
     type: {
         type: String,
@@ -16,26 +34,11 @@ const orderSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
-    route: {
-        pickup: {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'Routes',
-            required: true,
-            autopopulate: true,
-            select: 'pointA',
-        },
-        dropoff: {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'Routes',
-            required: true,
-            autopopulate: true,
-            select: 'pointB',
-        },
-    },
+    route: routeSchema,
     status: {
         type: String,
-        enum: Object.values(OrderStatus),
-        default: OrderStatus.EnProgreso,
+        enum: Object.values(Order_1.OrderStatus),
+        default: Order_1.OrderStatus.EnEspera,
         required: true
     },
     truck: {
@@ -44,5 +47,4 @@ const orderSchema = new mongoose_1.Schema({
         required: true
     },
 });
-const OrderModel = (0, mongoose_1.model)('Order', orderSchema);
-exports.default = OrderModel;
+exports.OrderModel = (0, mongoose_1.model)('Order', orderSchema);

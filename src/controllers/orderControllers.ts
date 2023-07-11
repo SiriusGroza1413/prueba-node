@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 
 import TruckModel from "../models/Truck";
-import OrderModel from "../models/Order";
-//import PointModel from "../models/Point";
-import { IPoint } from "../Interfaces/Point";
+import  {PointModel, RouteModel, OrderModel} from "../models/Order";
+import { createPickupAndDropoffPoints } from "../lib/createRoute";
+//import PointModel  from "../models/Point";
+//import { IPoint } from "../Interfaces/Point";
 
-;
 
 
 //PEDIR LAS ORDENES A LA DB
@@ -29,23 +29,16 @@ export const createOrder = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'El camión especificado no existe' });
     }
 
-
-    // const pickup = await PointModel.create({
-    //   location: {
-    //     name: routeData.pickup.name,
-    //     placeId: routeData.pickup.placeId
-    //   }
-    // })
-
-    // const dropoff = await PointModel.create({
-    //   location : {
-    //     name: routeData.dropoff.name,
-    //     placeId: routeData.dropoff.placeId
-    //   }
-    // })
+    const {pickup, dropoff} = await createPickupAndDropoffPoints(routeData)
      
-
     const distance = 1 + 1
+
+
+    const createdRoute = await RouteModel.create({
+      pickup: pickup,
+      dropoff: dropoff,
+      distance: distance,
+    })
 
 
 
@@ -53,21 +46,9 @@ export const createOrder = async (req: Request, res: Response) => {
     const order = await OrderModel.create({
       type,
       description,
-      route: {
-        location : {
-            pickup: {
-              name: routeData.pickup.name,
-              placeId: routeData.pickup.placeId
-            },
-            dropoff: {
-              name: routeData.dropoff.name,
-              placeId: routeData.dropoff.name
-            },
-      },
-        distance: distance
-      },
+      route: createdRoute,
+      distance,
       truck: truck._id,
-      status: 'En progreso'
     });
     
 
@@ -79,50 +60,69 @@ export const createOrder = async (req: Request, res: Response) => {
 }
 
 
-//MODIFICAR ORDEN
-export const changeOrder = async (req: Request, res: Response) => {
-  // const { type, description, routeData, status, truck } = req.body
-  // const { id } = req.params
-
-  // const order = await OrderModel.findById(id)
-  // console.log(order)
-
-  // if(!order){
-  //   return res.status(400).json('No se encontro la order')
-  // }
-  // //SI LA ORDEN NO ESTA EN PROGRESO SE MODIFICA
-  // if(order.status !== 'En progreso'){
-  //   //SI HAY ROUTE PARA MODIFICAR
-  //   if(routeData){
-
-  //     const pickup = await PointModel.create({
-  //       location: {
-  //         name: routeData.pickup.name,
-  //         placeId: routeData.pickup.placeId
-  //       }
-  //     })
-  
-  //     const dropoff = await PointModel.create({
-  //       location : {
-  //         name: routeData.dropoff.name,
-  //         placeId: routeData.dropoff.placeId
-  //       }
-  //     })
-
-  //     const distance = 1 + 1
-
-  //   // Crear la ruta nueva
-  //     const route = await RouteModel.create({
-  //       pickup,
-  //       dropoff,
-  //       distance
-  //     });
-
-  //     const orderUpdated = {
-        
-  //     }
+//MODIFICAR ORDEN 
+export const updateOrder = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const {type, description, routeData, status } = req.body;
 
 
-  //   }
-  //}
-};
+  try {
+    // Verificar el estado actual del pedido
+    const order = await OrderModel.findById(id);
+
+    if(!order) {
+      return res.status(400).json('No existe la orden')
+    }
+    if(order.status === 'En progreso') {
+      return res.status(403).json({ message: 'No se puede modificar un pedido en progreso' });
+    }
+
+    if(routeData){
+    const newRoute = await createPickupAndDropoffPoints(routeData)
+    const distance = 10
+
+    
+    const createdRoute = await RouteModel.create({
+      pickup: newRoute.pickup,
+      dropoff: newRoute.dropoff,
+      distance: distance
+    })
+
+
+      const updatedOrder = await OrderModel.findByIdAndUpdate(id, {
+        type: type,
+        description: description,
+        route: createdRoute,
+        status: status,
+      })
+      res.json(updatedOrder);
+
+    } else {
+      const updatedOrder = await OrderModel.findByIdAndUpdate(id, {
+        type: type,
+        description: description,
+        status: status,
+      })
+      res.json(updatedOrder);
+    }
+  } catch (error) {
+    console.error('Error al actualizar el pedido:', error);
+    res.status(500).json({ message: 'Ocurrió un error al actualizar el pedido' });
+  }
+}
+
+
+export const deleteOrder = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const orderToDelete = await OrderModel.findById(id)
+
+    if(!orderToDelete) return res.status(400).json('No existe la proporcionada')
+
+    if(orderToDelete?.status === 'En progreso'){
+      await OrderModel.findByIdAndDelete(id)
+      res.status(200).json('Orden eliminada exitosamente')
+    } else {
+      res.status(400).json('No se puede eliminar una orden en curso')
+    }
+} 
+
