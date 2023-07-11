@@ -1,26 +1,23 @@
-import { Schema, model, Document } from 'mongoose';
+// import { Schema, model, Document } from 'mongoose';
+// import { IRoute } from '../Interfaces/Route';
 
-interface IRoute {
-  pointA: Schema.Types.ObjectId;
-  pointB: Schema.Types.ObjectId;
-  distance: number;
-}
+// const routeSchema = new Schema<IRoute & Document>({
+//   pickup: {
+//     type: Schema.Types.ObjectId,
+//     ref: 'Points',
+//     required: true,
+//   },
+//   dropoff: {
+//     type: Schema.Types.ObjectId,
+//     ref: 'Points',
+//     required: true,
+//   },
+//   distance: {
+//     type: Number,
+//     required: true,
+//   },
+// });
 
-const routeSchema = new Schema<IRoute & Document>({
-  pointA: {
-    type: Schema.Types.ObjectId,
-    ref: 'Points',
-    required: true,
-  },
-  pointB: {
-    type: Schema.Types.ObjectId,
-    ref: 'Points',
-    required: true,
-  },
-  distance: {
-    type: Number,
-    required: true,
-  },
-});
+// const RoutesModel = model<IRoute>('Route', routeSchema);
 
-export const RoutesModel = model<IRoute>('Route', routeSchema);
+// export default RoutesModel
