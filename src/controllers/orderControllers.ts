@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import TruckModel from "../models/Truck";
 import  {PointModel, RouteModel, OrderModel} from "../models/Order";
 import { createPickupAndDropoffPoints } from "../lib/createRoute";
+import mongoose from "mongoose";
 //import PointModel  from "../models/Point";
 //import { IPoint } from "../Interfaces/Point";
 
@@ -64,7 +65,6 @@ export const createOrder = async (req: Request, res: Response) => {
 export const updateOrder = async (req: Request, res: Response) => {
   const { id } = req.params;
   const {type, description, routeData, status } = req.body;
-
 
   try {
     // Verificar el estado actual del pedido

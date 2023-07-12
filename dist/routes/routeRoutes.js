@@ -27,4 +27,5 @@ const express_1 = require("express");
 const routerController = __importStar(require("../controllers/routeController"));
 const router = (0, express_1.Router)();
 router.get('/', routerController.getAllRoutes);
+router.delete('/:id', routerController.deleteRoute);
 exports.default = router;

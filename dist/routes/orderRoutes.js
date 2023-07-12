@@ -26,12 +26,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const orderControllers = __importStar(require("../controllers/orderControllers"));
 const router = (0, express_1.Router)();
-//CREAR UNA ORDEN
-router.post('/', orderControllers.createOrder);
-//OBTENER TODAS LAS ORDENES DE LA DB
-router.get('/', orderControllers.getAllOrders);
 //MODIFICAR UNA ORDEN
 router.put('/:id', orderControllers.updateOrder);
 //BORRAR UNA ORDEN
 router.delete('/:id', orderControllers.deleteOrder);
+//CREAR UNA ORDEN
+router.post('/', orderControllers.createOrder);
+//OBTENER TODAS LAS ORDENES DE LA DB
+router.get('/', orderControllers.getAllOrders);
 exports.default = router;
