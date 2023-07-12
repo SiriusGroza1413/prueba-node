@@ -24,14 +24,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const orderControllers = __importStar(require("../controllers/orderControllers"));
+const routerController = __importStar(require("../controllers/routeController"));
 const router = (0, express_1.Router)();
-//MODIFICAR UNA ORDEN
-router.put('/:id', orderControllers.updateOrder);
-//BORRAR UNA ORDEN
-router.delete('/:id', orderControllers.deleteOrder);
-//CREAR UNA ORDEN
-router.post('/', orderControllers.createOrder);
-//OBTENER TODAS LAS ORDENES DE LA DB
-router.get('/', orderControllers.getAllOrders);
+router.get('/', routerController.getAllRoutes);
+router.delete('/:id', routerController.deleteRoute);
 exports.default = router;
