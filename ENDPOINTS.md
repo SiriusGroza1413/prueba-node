@@ -1,17 +1,5 @@
 #### Este archivo .md proporciona detalles acerca de los endpoints creados asi como de los resultados que devuelven.
 
-Antes de empezar a leer esta documentacion hecha a prisas sin siquiera haber llegado a la mitad de las features requeridas, solo queria  
-decir que estaba buscando esta oportunidad para crecer dentro de una empresa y que me moldearan a su gusto (me paguen o no), estos dias desde el lunes  
-he estado corriendo por completar todo lo requerido con tecnologias de las cuales solo he tocado la superficie hace meses  
-(TS y Mongoose) Tampoco pude hacer la feature de obtener las coordenadas ya que iba a estar mas de un dia leyendo esta api  
-y probandola, ademas de que requeria tarjeta de credito para su uso gratuito asi que decidi enfocarme por lo mas basico.
-Quiero decir que, quien sea que lea esto estoy muy agradecido por la oportunidad, y a pesar de las complicaciones que sufri  
-durante el trayecto de esta prueba tecnica mis ganas de aprender y crecer no se esfumarán, algun dia deseo ser un gran  
-desarrollador, es lo unico que puedo ser ahora...Solo queda mejorar este proyecto en un futuro.
-Tambien quiero dar las gracias a la señorita Sandra Trejo por su gran carisma y amabilidad.
-
-
-
 # Nombre de endpoint: /order  
 ### Tipo de solicitud: GET  
 Detalle de la solicitud: Esta solicitud al endpoint mencionado devuelve todas las ordenes de la base de datos de forma  
